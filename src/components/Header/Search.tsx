@@ -1,4 +1,4 @@
-import { Input } from './ui/input';
+import { Input } from '../ui/input';
 import { useSearchParams } from 'react-router-dom';
 
 export default function Search() {
