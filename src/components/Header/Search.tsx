@@ -1,22 +1,13 @@
 import { Input } from '../ui/input';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchTerm } from '@/lib/hooks/useSearchTerm';
 
 export default function Search() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const { searchTerm, setSearchTerm } = useSearchTerm();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const searchTerm: string = e.target.value;
-    const newSearchParams: URLSearchParams = new URLSearchParams(searchParams);
+    const value: string = e.target.value;
 
-    if (!searchTerm) {
-      newSearchParams.delete('query');
-      setSearchParams(newSearchParams, { replace: true });
-
-      return;
-    }
-
-    newSearchParams.set('query', searchTerm);
-    setSearchParams(newSearchParams, { replace: true });
+    setSearchTerm(value);
   };
 
   return (
@@ -32,6 +23,7 @@ export default function Search() {
       <Input
         className="pl-8"
         placeholder="Find any github profile..."
+        value={searchTerm}
         onChange={handleChange}
       />
     </form>

@@ -7,7 +7,7 @@
     --background: 218 88.89% 3.53%;
     --foreground: 208 5.35% 95.29%;
 
-    --card: 218 88.89% 3.53%;
+    --card: 216, 28%, 7%;
     --card-foreground: 208 5.35% 95.29%;
 
     --popover: 218 88.89% 3.53%;
@@ -73,4 +73,26 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+::-webkit-scrollbar {
+  width: 2px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px hsl(var(--secondary));
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--secondary));
+  border-radius: 10px;
 }

@@ -18,6 +18,9 @@ module.exports = {
       }
     },
     extend: {
+      spacing: {
+        450: '450px'
+      },
       fontFamily: {
         sans: ['Montserrat', 'sans-serif']
       },
