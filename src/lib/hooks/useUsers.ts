@@ -2,6 +2,7 @@ import useStore from '@/store';
 import { useEffect, useMemo } from 'react';
 import { useInfiniteGraphQL } from '../graphqlClient';
 import { GraphQLUserResponse, User } from '../types';
+import { useDebounce } from 'use-debounce';
 
 const usersSearchQuery = `
 query SearchUsers($queryString: String!, $first: Int!, $after: String) {
@@ -41,18 +42,19 @@ const filteredUsers = (data: GraphQLUserResponse): User[] => {
 
 export const useUsers = () => {
   const { users, setUsers, searchTerm, setUserCount, userCount } = useStore();
+  const [debouncedSearchTerm] = useDebounce(searchTerm, 500);
 
   const variables = useMemo(
     () => ({
-      queryString: `${searchTerm} in:name`,
+      queryString: `${debouncedSearchTerm} in:name`,
       first: 20
     }),
-    [searchTerm]
+    [debouncedSearchTerm]
   );
 
   const { data, isLoading, error, fetchNextPage, hasNextPage } =
     useInfiniteGraphQL('users', usersSearchQuery, variables, {
-      enabled: !!searchTerm
+      enabled: !!debouncedSearchTerm
     });
 
   useEffect(() => {
@@ -64,10 +66,11 @@ export const useUsers = () => {
   }, [searchTerm, data, setUsers, setUserCount]);
 
   useEffect(() => {
-    if (!searchTerm) {
+    if (!debouncedSearchTerm) {
       setUsers([]);
+      setUserCount(0);
     }
-  }, [searchTerm, setUsers]);
+  }, [debouncedSearchTerm, setUsers, setUserCount]);
 
   return { users, isLoading, error, fetchNextPage, hasNextPage, userCount };
 };
